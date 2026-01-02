@@ -5,14 +5,17 @@ export default function handler(request, response) {
     return response.status(500).json({ error: "Data missing" });
   }
 
-  const msPerDay = 24 * 60 * 60 * 1000;
-  const daysSinceEpoch = Math.floor(Date.now() / msPerDay);
-  const todayIndex = daysSinceEpoch % constellations.length;
-  
-  const data = constellations[todayIndex];
+  const now = new Date();
+  const seed = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
+
+  const x = Math.sin(seed) * 10000;
+  const random0to1 = x - Math.floor(x);
+
+  const randomIndex = Math.floor(random0to1 * constellations.length);
+  const todaysConstellation = constellations[randomIndex];
 
   response.setHeader('Content-Type', 'application/json');
-  response.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=43200');
+  response.setHeader('Cache-Control', 's-maxage=14400, stale-while-revalidate=86400');
 
-  return response.status(200).json(data);
+  return response.status(200).json(todaysConstellation);
 }
