@@ -95,12 +95,15 @@ export default function handler(request, response) {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            
-            /* Dikke lijnen filter */
-            filter: 
+
+            /* Verdik de transparante lijntekening voor het 1-bit e-ink-scherm. */
+            filter:
             invert(1)
-            drop-shadow(0 0 1px white)
-            drop-shadow(0 0 1px white);
+            contrast(1.25)
+            drop-shadow(1px 0 0 #ffffff)
+            drop-shadow(-1px 0 0 #ffffff)
+            drop-shadow(0 1px 0 #ffffff)
+            drop-shadow(0 -1px 0 #ffffff);
             
             transform: scale(1.5);
             transform-origin: center center;
