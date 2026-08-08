@@ -97,15 +97,15 @@ export default function handler(request, response) {
             height: 100%;
             object-fit: contain;
             filter: invert(1) contrast(1.25);
-            transform: scale(1.5);
+            transform: scale(1.2);
             transform-origin: center center;
         }
 
         /* Stapelen werkt ook in de TRMNL-renderer, waar CSS-schaduwen kunnen wegvallen. */
-        .constellation-image--left { transform: translateX(-2px) scale(1.5); }
-        .constellation-image--right { transform: translateX(2px) scale(1.5); }
-        .constellation-image--up { transform: translateY(-2px) scale(1.5); }
-        .constellation-image--down { transform: translateY(2px) scale(1.5); }
+        .constellation-image--left { transform: translateX(-2px) scale(1.2); }
+        .constellation-image--right { transform: translateX(2px) scale(1.2); }
+        .constellation-image--up { transform: translateY(-2px) scale(1.2); }
+        .constellation-image--down { transform: translateY(2px) scale(1.2); }
 
         .title_bar {
             position: absolute;
