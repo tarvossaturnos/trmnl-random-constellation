@@ -92,22 +92,20 @@ export default function handler(request, response) {
         }
 
         .constellation-image {
+            position: absolute;
             width: 100%;
             height: 100%;
             object-fit: contain;
-
-            /* Verdik de transparante lijntekening voor het 1-bit e-ink-scherm. */
-            filter:
-            invert(1)
-            contrast(1.25)
-            drop-shadow(1px 0 0 #ffffff)
-            drop-shadow(-1px 0 0 #ffffff)
-            drop-shadow(0 1px 0 #ffffff)
-            drop-shadow(0 -1px 0 #ffffff);
-            
+            filter: invert(1) contrast(1.25);
             transform: scale(1.5);
             transform-origin: center center;
         }
+
+        /* Stapelen werkt ook in de TRMNL-renderer, waar CSS-schaduwen kunnen wegvallen. */
+        .constellation-image--left { transform: translateX(-2px) scale(1.5); }
+        .constellation-image--right { transform: translateX(2px) scale(1.5); }
+        .constellation-image--up { transform: translateY(-2px) scale(1.5); }
+        .constellation-image--down { transform: translateY(2px) scale(1.5); }
 
         .title_bar {
             position: absolute;
@@ -156,11 +154,11 @@ export default function handler(request, response) {
                 </div>
                 
                 <div class="map-area">
-                    <img 
-                    class="constellation-image"
-                    src="${data.image}"
-                    alt="${data.name}"
-                    >
+                    <img class="constellation-image constellation-image--left" src="${data.image}" alt="">
+                    <img class="constellation-image constellation-image--right" src="${data.image}" alt="">
+                    <img class="constellation-image constellation-image--up" src="${data.image}" alt="">
+                    <img class="constellation-image constellation-image--down" src="${data.image}" alt="">
+                    <img class="constellation-image" src="${data.image}" alt="${data.name}">
                 </div>
 
                 <div class="title_bar">
