@@ -1,18 +1,12 @@
-import constellations from '../data/constellations.json';
+import { getDailyConstellation, getPublicConstellation } from './constellation-data.js';
 
 export default function handler(request, response) {
-  if (!constellations || constellations.length === 0) {
+  let data;
+  try {
+    data = getPublicConstellation(request, getDailyConstellation());
+  } catch {
     return response.status(500).send("Geen data gevonden.");
   }
-
-  const now = new Date();
-  const seed = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
-  
-  const x = Math.sin(seed) * 10000;
-  const random0to1 = x - Math.floor(x);
-  
-  const randomIndex = Math.floor(random0to1 * constellations.length);
-  const data = constellations[randomIndex];
   
   const html = `
     <!DOCTYPE html>
@@ -43,94 +37,53 @@ export default function handler(request, response) {
             overflow: hidden;
         }
 
-        /* --- JOUW NIEUWE TRMNL CSS (Sandwich Layout) --- */
-        
         .layout-container {
             position: relative;
             width: 100%;
             height: 100%;
-            background-color: #000000;
-            overflow: hidden;
-        }
-
-        .description-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
             background-color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 10px;
-            box-sizing: border-box;
-            z-index: 20;
-            border-bottom: 2px solid #000000;
-        }
-
-        .description-text {
-            color: #000000;
-            font-size: 14px;
-            font-family: sans-serif;
-            text-align: center;
-            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
         }
 
         .map-area {
-            width: 100%;
-            height: calc(100% - 75px); 
-            top: 40px;
             position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 56px;
+            left: 0;
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden; 
+            justify-content: center;
+            padding: 14px 20px;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .constellation-image {
-            position: absolute;
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: invert(1) contrast(1.25);
-            transform: scale(1.2);
-            transform-origin: center center;
+            display: block;
         }
 
-        /* Stapelen werkt ook in de TRMNL-renderer, waar CSS-schaduwen kunnen wegvallen. */
-        .constellation-image--left { transform: translateX(-2px) scale(1.2); }
-        .constellation-image--right { transform: translateX(2px) scale(1.2); }
-        .constellation-image--up { transform: translateY(-2px) scale(1.2); }
-        .constellation-image--down { transform: translateY(2px) scale(1.2); }
-
-        .title_bar {
+        .title-bar {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 35px;
+            height: 56px;
             background-color: #ffffff;
             display: flex;
-            align-items: center;
-            padding-left: 10px;
-            z-index: 20;
-            border-top: 2px solid #000000;
-        }
-
-        .icon-small {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            filter: grayscale(1); 
+            flex-wrap: wrap;
+            align-content: center;
+            padding: 5px 14px;
+            box-sizing: border-box;
+            border-top: 1px solid #b5b5b5;
         }
 
         .title-text {
             font-family: sans-serif;
             color: #000000;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             white-space: nowrap;
         }
@@ -139,8 +92,17 @@ export default function handler(request, response) {
             margin-left: 6px;
             font-size: 14px;
             font-style: italic;
-            color: #444;
-            padding-top: 2px;
+            color: #555555;
+        }
+
+        .description-text {
+            width: 100%;
+            margin-top: 2px;
+            font-size: 12px;
+            color: #555555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
       </style>
     </head>
@@ -149,22 +111,14 @@ export default function handler(request, response) {
         <div class="trmnl-device">
             
             <div class="layout-container">
-                <div class="description-bar">
-                    <span class="description-text">${data.description}</span>
-                </div>
-                
                 <div class="map-area">
-                    <img class="constellation-image constellation-image--left" src="${data.image}" alt="">
-                    <img class="constellation-image constellation-image--right" src="${data.image}" alt="">
-                    <img class="constellation-image constellation-image--up" src="${data.image}" alt="">
-                    <img class="constellation-image constellation-image--down" src="${data.image}" alt="">
                     <img class="constellation-image" src="${data.image}" alt="${data.name}">
                 </div>
 
-                <div class="title_bar">
-                    <img class="icon-small" src="https://cdn-icons-png.flaticon.com/512/2107/2107957.png">
+                <div class="title-bar">
                     <span class="title-text">${data.name}</span>
                     <span class="subtitle-text">(${data.latin})</span>
+                    <span class="description-text">${data.description}</span>
                 </div>
             </div>
 
