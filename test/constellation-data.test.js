@@ -5,6 +5,7 @@ import {
   getDailyConstellation,
   getPublicConstellation,
 } from '../api/constellation-data.js';
+import imageHandler from '../api/image.js';
 import previewHandler from '../api/index.js';
 
 test('uses one deterministic constellation for the same UTC date', () => {
@@ -30,7 +31,7 @@ test('returns a deployment-local absolute artwork URL', () => {
   assert.equal(constellation.image, 'https://constellations.example/constellations/andromeda.png');
 });
 
-test('preview uses the same local artwork URL as the data endpoint', () => {
+test('capture page uses the same local artwork URL as the data endpoint', () => {
   let body = '';
   const response = {
     setHeader() {},
@@ -47,4 +48,32 @@ test('preview uses the same local artwork URL as the data endpoint', () => {
 
   assert.match(body, /https:\/\/constellations\.example\/constellations\/[a-z]+\.png/);
   assert.doesNotMatch(body, /noirlab\.edu/);
+  assert.match(body, /width: 100%/);
+  assert.match(body, /height: 100%/);
+  assert.doesNotMatch(body, /trmnl-device/);
+});
+
+test('image endpoint redirects to the daily artwork', () => {
+  let redirectedTo = '';
+  const response = {
+    setHeader() {},
+    status() {
+      return this;
+    },
+    send() {
+      return this;
+    },
+    redirect(status, url) {
+      assert.equal(status, 302);
+      redirectedTo = url;
+      return this;
+    },
+  };
+
+  imageHandler({ headers: { host: 'constellations.example' } }, response);
+
+  assert.match(
+    redirectedTo,
+    /^https:\/\/constellations\.example\/constellations\/[a-z]+\.png$/,
+  );
 });

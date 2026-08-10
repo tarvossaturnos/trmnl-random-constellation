@@ -14,10 +14,14 @@ display.
 
 - `/api/constellation` returns the constellation data for the day, including an
   absolute URL for its artwork.
-- `/api` shows an 800×480 browser preview using the same layout rules.
+- `/api/image` redirects directly to the daily PNG; use this in a TRMNL
+  `<img>` element.
+- `/` (rewritten to `/api`) is a responsive page, suitable for embedding in a
+  TRMNL `<iframe>` at full, half, or quadrant size.
 
-Use the contents of [trmnl-layout.html](trmnl-layout.html) as the TRMNL layout
-template.
+Use `https://your-domain.example/` in TRMNL's Screenshot plugin. The standalone
+[trmnl-layout.html](trmnl-layout.html) remains available if you ever prefer a
+Private Plugin again.
 
 ## Artwork
 
