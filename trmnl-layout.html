@@ -11,12 +11,12 @@
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 56px;
+    bottom: 23.34%;
     left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 20px;
+    padding: 3% 2.5%;
     box-sizing: border-box;
     overflow: hidden;
   }
@@ -33,11 +33,11 @@
     right: 0;
     bottom: 0;
     left: 0;
-    height: 56px;
+    height: 23.34%;
     display: flex;
     flex-wrap: wrap;
     align-content: center;
-    padding: 5px 14px;
+    padding: 1% 1.75%;
     box-sizing: border-box;
     background: #ffffff;
     border-top: 1px solid #b5b5b5;
@@ -46,16 +46,19 @@
   .title-text {
     color: #000000;
     font-family: sans-serif;
-    font-size: 20px;
+    font-size: clamp(20px, min(5vw, 8.34vh), 40px);
     font-weight: bold;
+    line-height: 1.05;
     white-space: nowrap;
   }
 
   .subtitle-text {
-    margin-left: 6px;
+    align-self: baseline;
+    margin-left: clamp(6px, 1.5vw, 12px);
     color: #555555;
-    font-size: 14px;
+    font-size: clamp(14px, min(3.5vw, 5.84vh), 28px);
     font-style: italic;
+    line-height: 1.05;
   }
 
   .description-text {
@@ -63,7 +66,7 @@
     margin-top: 2px;
     overflow: hidden;
     color: #555555;
-    font-size: 12px;
+    font-size: clamp(7px, min(1.5vw, 2.5vh), 12px);
     white-space: nowrap;
     text-overflow: ellipsis;
   }
